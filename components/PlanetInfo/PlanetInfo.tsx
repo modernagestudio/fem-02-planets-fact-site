@@ -1,7 +1,7 @@
 import { styled } from "styles/stitches.config";
 import { useState } from "react";
 import Image from "next/image";
-// import Mercury from "public/assets/planet-mercury.svg";
+import PlanetData from "data/data.json";
 
 const LayoutWrapper = styled("div", {
     paddingInline: "$3",
@@ -42,7 +42,10 @@ const TabContainer = styled("div", {
         height: "auto",
         borderBottom: 0,
         padding: 0,
-        paddingBottom: 72,
+        paddingBottom: "$9",
+    },
+    "@desktop": {
+        paddingBottom: 0,
     },
 });
 
@@ -69,6 +72,9 @@ const StyledTabItem = styled("div", {
         paddingInline: 20,
         counterIncrement: "my-sec-counter",
         gap: "$2",
+        "&:hover": {
+            backgroundColor: "rgba(216, 216, 216, 0.2)",
+        },
         "& + *": {
             marginTop: "$2",
         },
@@ -76,6 +82,11 @@ const StyledTabItem = styled("div", {
             content: "'0' counter(my-sec-counter)",
             color: "rgba(255,255,255,0.5)",
         },
+    },
+    "@desktop": {
+        height: 48,
+        fontSize: 12,
+        letterSpacing: 2.5,
     },
     variants: {
         active: {
@@ -94,6 +105,9 @@ const StyledTabItem = styled("div", {
                 },
                 "@tablet": {
                     background: "var(--accent-color)",
+                    "&:hover": {
+                        background: "var(--accent-color)",
+                    },
                     "&::after": {
                         display: "none",
                     },
@@ -101,20 +115,41 @@ const StyledTabItem = styled("div", {
             },
         },
         planet: {
-            mercury: {
+            0: {
                 "--accent-color": "var(--color-mercury)",
+            },
+            1: {
+                "--accent-color": "var(--color-venus)",
+            },
+            2: {
+                "--accent-color": "var(--color-earth)",
+            },
+            3: {
+                "--accent-color": "var(--color-mars)",
+            },
+            4: {
+                "--accent-color": "var(--color-jupiter)",
+            },
+            5: {
+                "--accent-color": "var(--color-saturn)",
+            },
+            6: {
+                "--accent-color": "var(--color-uranus)",
+            },
+            7: {
+                "--accent-color": "var(--color-neptune)",
             },
         },
     },
     defaultVariants: {
-        planet: "mercury",
+        planet: 0,
     },
 });
 
 const TabItem = (props: any) => {
-    const { label, active, onClick } = props;
+    const { label, active, onClick, planet } = props;
     return (
-        <StyledTabItem active={active} onClick={onClick}>
+        <StyledTabItem active={active} onClick={onClick} planet={planet}>
             {label}
         </StyledTabItem>
     );
@@ -126,52 +161,174 @@ TabItem.defaultProps = {
 
 const TextSection = styled("div", {
     gridArea: "textsection",
+    textAlign: "center",
     "& h1": {
         fontSize: 48,
         fontWeight: 300,
         textTransform: "uppercase",
         fontFamily: "$antonio",
+        marginBottom: "$2",
     },
     "& p": {
-        maxWidth: "60ch",
+        fontSize: 11,
+        lineHeight: "22px",
+    },
+    "@tablet": {
+        textAlign: "start",
+        "& p": {
+            maxWidth: "60ch",
+        },
+    },
+    "@desktop": {
+        paddingTop: 128,
+        "& h1": {
+            fontSize: 80,
+        },
+        "& p": {
+            fontSize: 14,
+            lineHeight: "25px",
+        },
     },
 });
 
 const ImageSection = styled("div", {
     gridArea: "imagesection",
-    background: "red",
     minHeight: 314,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    position: "relative",
+    "& .img-wrapper": {
+        position: "absolute",
+        transform: "scale(0.39)",
+    },
+    "& .geology-wrapper": {
+        position: "absolute",
+        transform: "scale(0.5) translateY(150px)",
+    },
     "@tablet": {
         minHeight: 466,
+        "& .img-wrapper": {
+            transform: "scale(0.63)",
+        },
+        "& .geology-wrapper": {
+            transform: "scale(0.75) translateY(150px)",
+        },
     },
     "@desktop": {
-        minHeight: 0,
+        minHeight: 664,
+        "& .img-wrapper": {
+            transform: "scale(1)",
+        },
+        "& .geology-wrapper": {
+            transform: "scale(1) translateY(170px)",
+        },
     },
 });
 
 const StyledInfoBoxContainer = styled("div", {
     gridArea: "infoboxes",
+    marginTop: "$3",
+    marginBottom: "$6",
+    "& > * + *": {
+        marginTop: "$1",
+    },
+    "@tablet": {
+        display: "flex",
+        gap: "$4",
+        "& > * + *": {
+            marginTop: 0,
+        },
+    },
+    "@desktop": {
+        marginTop: "$10",
+    },
 });
 const StyledInfoBoxItem = styled("div", {
     height: "$6",
     border: "1px solid rgba(255,255,255,0.2)",
+    flex: 1,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingInline: "$3",
+    "& .infobox-label": {
+        fontSize: 8,
+        fontFamily: "$spartan",
+        color: "rgba(255,255,255,0.5)",
+        textTransform: "uppercase",
+        letterSpacing: 0.75,
+        fontWeight: "bold",
+    },
+    "& .infobox-value": {
+        fontSize: 20,
+        fontFamily: "$antonio",
+        color: "$white",
+        textTransform: "uppercase",
+        letterSpacing: -0.75,
+    },
+    "@tablet": {
+        flexDirection: "column",
+        alignItems: "start",
+        justifyContent: "center",
+        height: 88,
+        gap: "$1",
+        "& .infobox-value": {
+            fontSize: 24,
+        },
+    },
+    "@desktop": {
+        height: 128,
+        "& .infobox-label": {
+            fontSize: 11,
+        },
+        "& .infobox-value": {
+            fontSize: 40,
+        },
+    },
 });
 
-const InfoBoxes = (props: any) => {
-    const { data } = props;
+const StyledWikiLink = styled("div", {
+    display: "inline-block",
+    fontSize: 12,
+    color: "rgba(255, 255, 255, 0.5)",
+    marginTop: "$4",
+    "& > a": {
+        textDecoration: "underline",
+        color: "inherit",
+        fontWeight: "bold",
+
+        "&::after": {
+            content: "",
+            display: "inline-block",
+            width: 12,
+            height: 12,
+            background: "url(/assets/icon-source.svg)",
+            marginLeft: 4,
+        },
+    },
+    "@desktop": {
+        fontSize: 14,
+        marginTop: "$3",
+    },
+});
+
+const WikiLink = (props: any) => {
+    const { href } = props;
     return (
-        <StyledInfoBoxContainer>
-            <StyledInfoBoxItem>Item</StyledInfoBoxItem>
-            <StyledInfoBoxItem>Item</StyledInfoBoxItem>
-            <StyledInfoBoxItem>Item</StyledInfoBoxItem>
-            <StyledInfoBoxItem>Item</StyledInfoBoxItem>
-        </StyledInfoBoxContainer>
+        <StyledWikiLink>
+            Source :{" "}
+            <a href={href} target="_blank" rel="noreferrer">
+                Wikipedia
+            </a>
+        </StyledWikiLink>
     );
 };
 
 export const PlanetInfo = (props: any) => {
-    const { activePlanet } = props;
+    const { planetIndex } = props;
     const [activeTab, updateActiveTab] = useState("overview");
+    const currentPlanet = PlanetData[planetIndex];
     const handleClick = (tabName: string) => {
         updateActiveTab(tabName);
     };
@@ -179,43 +336,119 @@ export const PlanetInfo = (props: any) => {
         <LayoutWrapper>
             <TabContainer>
                 <TabItem
+                    planet={planetIndex}
                     label="Overview"
                     active={activeTab === "overview"}
                     onClick={() => handleClick("overview")}
                 />
                 <TabItem
+                    planet={planetIndex}
                     label="Structure"
                     active={activeTab === "structure"}
                     onClick={() => handleClick("structure")}
                 />
                 <TabItem
+                    planet={planetIndex}
                     label="Surface"
                     active={activeTab === "surface"}
                     onClick={() => handleClick("surface")}
                 />
             </TabContainer>
 
-            <ImageSection>kgjygyg</ImageSection>
+            <ImageSection>
+                {activeTab === "overview" && (
+                    <div className="img-wrapper">
+                        <Image
+                            src={currentPlanet.images.planet}
+                            alt="planet"
+                            width={currentPlanet.images.size}
+                            height={currentPlanet.images.size}
+                        />
+                    </div>
+                )}
+                {activeTab === "structure" && (
+                    <div className="img-wrapper">
+                        <Image
+                            src={currentPlanet.images.internal}
+                            alt="planet"
+                            width={currentPlanet.images.size}
+                            height={currentPlanet.images.size}
+                        />
+                    </div>
+                )}
+                {activeTab === "surface" && (
+                    <>
+                        <div className="img-wrapper">
+                            <Image
+                                src={currentPlanet.images.planet}
+                                alt="planet"
+                                width={currentPlanet.images.size}
+                                height={currentPlanet.images.size}
+                            />
+                        </div>
+                        <div className="geology-wrapper">
+                            <Image
+                                className="img-geology"
+                                src={currentPlanet.images.geology}
+                                alt="planet"
+                                width={163}
+                                height={199}
+                            />
+                        </div>
+                    </>
+                )}
+            </ImageSection>
 
             <TextSection>
-                <h1>{activePlanet || "Planet"}</h1>
-                <p>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                    Eveniet rerum odit vero? Velit accusantium, incidunt
-                    asperiores aperiam vero iusto! Voluptatem ipsa tempora
-                    nostrum natus numquam labore fuga aspernatur eaque dolore
-                    corrupti. Velit odit, iusto, ab sit libero sed repellat
-                    ipsam possimus tenetur, hic vitae quasi saepe nam mollitia
-                    maxime. At tempore, quod omnis est officiis, illum quisquam
-                    velit a soluta deserunt ab, dolor rem adipisci nesciunt! A
-                    nam, quis ipsum hic rem maiores adipisci minus quam, eaque
-                    maxime veniam consectetur asperiores. Voluptatem beatae
-                    consequatur, non nam dicta possimus sapiente alias placeat
-                    provident quod in commodi. Aliquam voluptates eaque error
-                    corrupti!
-                </p>
+                <h1>{currentPlanet.name}</h1>
+                {activeTab === "overview" && (
+                    <>
+                        <p>{currentPlanet.overview.content}</p>
+                        <WikiLink href={currentPlanet.overview.source} />
+                    </>
+                )}
+                {activeTab === "structure" && (
+                    <>
+                        <p>{currentPlanet.structure.content}</p>
+                        <WikiLink href={currentPlanet.structure.source} />
+                    </>
+                )}
+                {activeTab === "surface" && (
+                    <>
+                        <p>{currentPlanet.geology.content}</p>
+                        <WikiLink href={currentPlanet.geology.source} />
+                    </>
+                )}
             </TextSection>
-            <InfoBoxes />
+
+            <StyledInfoBoxContainer>
+                <StyledInfoBoxItem>
+                    <div className="infobox-label">Rotation time</div>
+                    <div className="infobox-value">
+                        {currentPlanet.rotation}
+                    </div>
+                </StyledInfoBoxItem>
+                <StyledInfoBoxItem>
+                    <div className="infobox-label">Revolution time</div>
+                    <div className="infobox-value">
+                        {currentPlanet.revolution}
+                    </div>
+                </StyledInfoBoxItem>
+                <StyledInfoBoxItem>
+                    <div className="infobox-label">Radius</div>
+                    <div className="infobox-value">{currentPlanet.radius}</div>
+                </StyledInfoBoxItem>
+                <StyledInfoBoxItem>
+                    <div className="infobox-label">Average temp.</div>
+                    <div className="infobox-value">
+                        {currentPlanet.temperature}
+                    </div>
+                </StyledInfoBoxItem>
+            </StyledInfoBoxContainer>
         </LayoutWrapper>
     );
+};
+
+PlanetInfo.defaultProps = {
+    planetIndex: 0,
 };

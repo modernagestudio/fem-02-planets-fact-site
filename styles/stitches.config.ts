@@ -42,6 +42,7 @@ export const {
             8: "64px",
             9: "72px",
             10: "80px",
+            11: "88px",
         },
         sizes: {
             1: "8px",
@@ -54,6 +55,7 @@ export const {
             8: "64px",
             9: "72px",
             10: "80px",
+            11: "88px",
         },
     },
     media: {

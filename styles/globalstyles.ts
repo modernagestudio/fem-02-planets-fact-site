@@ -18,9 +18,14 @@ export const globalStyles = globalCss({
         "--color-uranus": "$colors$teal",
         "--color-neptune": "$colors$blue",
     },
+    // reset
+    "h1, h2, h3, h4, h5, h6, p": {
+        margin: 0,
+        padding: 0,
+    },
     body: {
         fontFamily: "Spartan, sans-serif",
-        background: "$navy",
+        background: "$navy url(/assets/background-stars.svg) center",
         color: "$white",
         margin: 0,
         padding: 0,
