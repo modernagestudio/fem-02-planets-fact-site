@@ -12,7 +12,7 @@ const StyledNavbar = styled("div", {
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingLeft: "$4",
+    paddingLeft: "$3",
     paddingRight: "$2",
     "@tablet": {
         justifyContent: "center",
