@@ -1,11 +1,10 @@
 /* eslint-disable @next/next/no-page-custom-font */
-import type { NextPage } from "next";
 import Head from "next/head";
 import { globalStyles } from "styles/globalstyles";
 import { Navbar } from "components";
 
 export const PageWrapper = (props: any) => {
-    const { title, children } = props;
+    const { children } = props;
     globalStyles();
     return (
         <>
@@ -19,7 +18,7 @@ export const PageWrapper = (props: any) => {
                     name="viewport"
                     content="width=device-width, initial-scale=1.0"
                 ></meta>
-                <link rel="icon" href="/favicon.ico" />
+                <link rel="icon" href="assets/favicon-32x32.png" />
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" />
                 <link
