@@ -1,8 +1,8 @@
 import type { NextPage } from "next";
-import { styled } from "styles/stitches.config";
+import { PlanetInfo } from "components";
 
 const Earth: NextPage = () => {
-    return <div>Earth</div>;
+    return <PlanetInfo planetIndex={2} />;
 };
 
 export default Earth;

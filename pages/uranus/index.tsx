@@ -1,8 +1,8 @@
 import type { NextPage } from "next";
-import { styled } from "styles/stitches.config";
+import { PlanetInfo } from "components";
 
 const Uranus: NextPage = () => {
-    return <div>Uranus</div>;
+    return <PlanetInfo planetIndex={6} />;
 };
 
 export default Uranus;

@@ -1,8 +1,8 @@
 import type { NextPage } from "next";
-import { styled } from "styles/stitches.config";
+import { PlanetInfo } from "components";
 
 const Jupiter: NextPage = () => {
-    return <div>Jupiter</div>;
+    return <PlanetInfo planetIndex={4} />;
 };
 
 export default Jupiter;

@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 const StyledNavbar = styled("div", {
     height: 86,
     position: "relative",
+    zIndex: 10,
     top: 0,
     width: "100%",
     borderBottom: "1px solid rgba(255,255,255,0.2)",
@@ -210,7 +211,12 @@ export const Navbar = () => {
                 }}
                 active={navOpen}
             />
-            <StyledNav closed={!navOpen}>
+            <StyledNav
+                closed={!navOpen}
+                onClick={() => {
+                    updateNavOpen(!navOpen);
+                }}
+            >
                 <NavLink text="Mercury" planet="mercury" href="/" />
                 <NavLink text="Venus" planet="venus" href="/venus" />
                 <NavLink text="Earth" planet="earth" href="/earth" />
